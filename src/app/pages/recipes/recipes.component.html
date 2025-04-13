@@ -1,0 +1,11 @@
+<h1>Recipes</h1>
+
+<div>
+  <div class="recipes">
+    @for (item of recipes; track item) {
+    <app-recipe-item [recipe]="item"></app-recipe-item>
+    } @empty {
+    <li>There are no items.</li>
+    }
+  </div>
+</div>

@@ -1,4 +1,18 @@
-<mat-card class="recipe">
+<mat-card class="recipe" (click)="navigateToRecipe()">
+  <img src="welcome.jpg" alt="pic" />
+  <mat-card-header>
+    <mat-card-title>{{ recipe.name }}</mat-card-title>
+    <mat-card-subtitle>By {{ recipe.author }}</mat-card-subtitle>
+    <div class="time-container">
+      <img src="clock.png" style="height: 35px" alt="time" />
+      <p>{{ recipe.cookTimeMinutes }} min</p>
+    </div>
+  </mat-card-header>
+</mat-card>
+
+
+<!--
+  <mat-card class="recipe">
   <mat-card-header>
     <mat-card-title>{{ recipe.name }}</mat-card-title>
     <div class="time-container">
@@ -25,3 +39,5 @@
     </ol>
   </mat-card-content>
 </mat-card>
+  
+-->

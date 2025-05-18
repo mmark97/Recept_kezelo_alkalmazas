@@ -1,304 +1,55 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { Recipe } from '../../shared/models/Recipe';
 import { MatCardModule } from '@angular/material/card';
 import { RecipeItemComponent } from './recipe-item/recipe-item.component';
+import { CreateRecipeComponent } from './create-recipe/create-recipe.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { AuthService } from '../../shared/services/auth.service';
+import { firstValueFrom, Subscription, take } from 'rxjs';
+import { User } from 'firebase/auth';
+import { RecipesService } from '../../shared/services/recipes.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-recipes',
-  imports: [MatCardModule, RecipeItemComponent],
+  imports: [MatCardModule, RecipeItemComponent, MatButtonModule],
   templateUrl: './recipes.component.html',
-  styleUrl: './recipes.component.css',
+  styleUrl: './recipes.component.scss',
 })
 export class RecipesComponent {
-  recipes: Recipe[] = [
-    {
-      id: 1,
-      name: 'Simple Spaghetti Marinara',
-      description: 'A quick and easy classic Italian pasta dish.',
-      ingredients: [
-        {
-          id: 1,
-          name: 'Spaghetti',
-          quantity: 200,
-          unit: 'grams',
-          calories: 700,
-        },
-        { id: 2, name: 'Tomato Sauce', quantity: 1, unit: 'cup', calories: 90 },
-        { id: 3, name: 'Olive Oil', quantity: 2, unit: 'tbsp', calories: 240 },
-        { id: 4, name: 'Garlic', quantity: 3, unit: 'cloves', calories: 15 },
-        { id: 5, name: 'Basil', quantity: 5, unit: 'leaves', calories: 2 },
-      ],
-      instructions: [
-        'Boil water in a large pot and cook spaghetti until al dente.',
-        'Heat olive oil in a pan and sauté minced garlic for 1 minute.',
-        'Add tomato sauce and simmer for 10 minutes.',
-        'Drain spaghetti and mix with the sauce.',
-        'Garnish with fresh basil and serve hot.',
-      ],
-      servings: 2,
-      prepTimeMinutes: 10,
-      cookTimeMinutes: 15,
-      totalTimeMinutes: 25,
-      imageUrl: 'https://example.com/images/spaghetti.jpg',
-      createdAt: new Date('2025-04-10T10:00:00'),
-      updatedAt: new Date('2025-04-11T08:00:00'),
-      author: 'Chef Mario',
-      cuisine: 'Italian',
-      difficulty: 'easy',
-      reviews: [
-        {
-          id: 1,
-          recipeId: 1,
-          userId: 101,
-          rating: 5,
-          comment: 'Absolutely delicious! Super easy to make too.',
-          createdAt: new Date('2025-04-10T12:30:00'),
-        },
-        {
-          id: 2,
-          recipeId: 1,
-          userId: 102,
-          rating: 4,
-          comment:
-            'Tasted great, but I added some chili flakes for extra flavor.',
-          createdAt: new Date('2025-04-11T09:00:00'),
-        },
-      ],
-      tags: [
-        { id: 1, name: 'Vegan' },
-        { id: 2, name: 'Quick & Easy' },
-        { id: 3, name: 'Italian' },
-      ],
-    },
-    {
-      id: 2,
-      name: 'Classic Pancakes',
-      description: 'Fluffy and golden pancakes, perfect for breakfast.',
-      ingredients: [
-        { id: 6, name: 'Flour', quantity: 1, unit: 'cup', calories: 455 },
-        { id: 7, name: 'Milk', quantity: 1, unit: 'cup', calories: 103 },
-        { id: 8, name: 'Egg', quantity: 1, unit: 'piece', calories: 72 },
-        { id: 9, name: 'Baking Powder', quantity: 2, unit: 'tsp', calories: 2 },
-        { id: 10, name: 'Butter', quantity: 2, unit: 'tbsp', calories: 204 },
-      ],
-      instructions: [
-        'In a bowl, mix flour and baking powder.',
-        'Whisk in milk and egg until smooth.',
-        'Heat a skillet and melt butter.',
-        'Pour batter to form pancakes and cook until golden on both sides.',
-        'Serve with syrup or toppings of your choice.',
-      ],
-      servings: 4,
-      prepTimeMinutes: 5,
-      cookTimeMinutes: 10,
-      totalTimeMinutes: 15,
-      imageUrl: 'https://example.com/images/pancakes.jpg',
-      createdAt: new Date('2025-04-08T09:00:00'),
-      updatedAt: new Date('2025-04-08T10:00:00'),
-      author: 'Aunt May',
-      cuisine: 'American',
-      difficulty: 'easy',
-      reviews: [
-        {
-          id: 3,
-          recipeId: 2,
-          userId: 103,
-          rating: 5,
-          comment: 'So fluffy and easy to make!',
-          createdAt: new Date('2025-04-09T07:45:00'),
-        },
-      ],
-      tags: [
-        { id: 4, name: 'Breakfast' },
-        { id: 5, name: 'Comfort Food' },
-      ],
-    },
-    {
-      id: 3,
-      name: 'Thai Green Curry',
-      description:
-        'A spicy and flavorful curry with coconut milk and green curry paste.',
-      ingredients: [
-        {
-          id: 11,
-          name: 'Chicken Breast',
-          quantity: 300,
-          unit: 'grams',
-          calories: 495,
-        },
-        {
-          id: 12,
-          name: 'Green Curry Paste',
-          quantity: 3,
-          unit: 'tbsp',
-          calories: 60,
-        },
-        {
-          id: 13,
-          name: 'Coconut Milk',
-          quantity: 1,
-          unit: 'cup',
-          calories: 445,
-        },
-        {
-          id: 14,
-          name: 'Bamboo Shoots',
-          quantity: 100,
-          unit: 'grams',
-          calories: 27,
-        },
-        {
-          id: 15,
-          name: 'Thai Basil',
-          quantity: 10,
-          unit: 'leaves',
-          calories: 4,
-        },
-      ],
-      instructions: [
-        'Heat a pan and cook green curry paste until aromatic.',
-        'Add chicken and cook until no longer pink.',
-        'Pour in coconut milk and bring to a boil.',
-        'Add bamboo shoots and simmer for 10 minutes.',
-        'Garnish with Thai basil and serve with rice.',
-      ],
-      servings: 3,
-      prepTimeMinutes: 15,
-      cookTimeMinutes: 20,
-      totalTimeMinutes: 35,
-      imageUrl: 'https://example.com/images/thai-green-curry.jpg',
-      createdAt: new Date('2025-04-12T14:00:00'),
-      updatedAt: new Date('2025-04-12T16:00:00'),
-      author: 'Somsak R.',
-      cuisine: 'Thai',
-      difficulty: 'medium',
-      reviews: [
-        {
-          id: 4,
-          recipeId: 3,
-          userId: 104,
-          rating: 5,
-          comment: 'Authentic taste and super comforting!',
-          createdAt: new Date('2025-04-12T18:00:00'),
-        },
-        {
-          id: 5,
-          recipeId: 3,
-          userId: 105,
-          rating: 3,
-          comment: 'A bit too spicy for me, but still tasty.',
-          createdAt: new Date('2025-04-13T08:30:00'),
-        },
-      ],
-      tags: [
-        { id: 6, name: 'Spicy' },
-        { id: 7, name: 'Dinner' },
-        { id: 8, name: 'Thai' },
-      ],
-    },
-    {
-      id: 4,
-      name: 'Mediterranean Quinoa Salad',
-      description:
-        'A refreshing and healthy salad packed with veggies, feta, and a zesty lemon dressing.',
-      ingredients: [
-        {
-          id: 16,
-          name: 'Quinoa',
-          quantity: 1,
-          unit: 'cup',
-          calories: 222,
-        },
-        {
-          id: 17,
-          name: 'Cherry Tomatoes',
-          quantity: 1,
-          unit: 'cup',
-          calories: 27,
-        },
-        {
-          id: 18,
-          name: 'Cucumber',
-          quantity: 1,
-          unit: 'cup',
-          calories: 16,
-        },
-        {
-          id: 19,
-          name: 'Feta Cheese',
-          quantity: 0.5,
-          unit: 'cup',
-          calories: 200,
-        },
-        {
-          id: 20,
-          name: 'Kalamata Olives',
-          quantity: 0.25,
-          unit: 'cup',
-          calories: 100,
-        },
-        {
-          id: 21,
-          name: 'Olive Oil',
-          quantity: 2,
-          unit: 'tbsp',
-          calories: 239,
-        },
-        {
-          id: 22,
-          name: 'Lemon Juice',
-          quantity: 2,
-          unit: 'tbsp',
-          calories: 8,
-        },
-        {
-          id: 23,
-          name: 'Fresh Parsley',
-          quantity: 2,
-          unit: 'tbsp',
-          calories: 2,
-        },
-      ],
-      instructions: [
-        'Cook quinoa according to package instructions. Let it cool.',
-        'Chop the vegetables and parsley.',
-        'In a large bowl, combine quinoa, tomatoes, cucumber, olives, feta, and parsley.',
-        'Whisk together olive oil and lemon juice, then drizzle over the salad.',
-        'Toss well and chill for 15 minutes before serving.',
-      ],
-      servings: 4,
-      prepTimeMinutes: 20,
-      cookTimeMinutes: 15,
-      totalTimeMinutes: 35,
-      imageUrl: 'https://example.com/images/mediterranean-quinoa-salad.jpg',
-      createdAt: new Date('2025-04-13T10:00:00'),
-      updatedAt: new Date('2025-04-13T10:30:00'),
-      author: 'Layla M.',
-      cuisine: 'Mediterranean',
-      difficulty: 'easy',
-      reviews: [
-        {
-          id: 6,
-          recipeId: 4,
-          userId: 106,
-          rating: 5,
-          comment: 'So fresh and delicious. Perfect for lunch!',
-          createdAt: new Date('2025-04-13T12:00:00'),
-        },
-        {
-          id: 7,
-          recipeId: 4,
-          userId: 107,
-          rating: 4,
-          comment: 'Loved the flavors. I added some red onion too!',
-          createdAt: new Date('2025-04-13T13:15:00'),
-        },
-      ],
-      tags: [
-        { id: 9, name: 'Vegetarian' },
-        { id: 10, name: 'Healthy' },
-        { id: 11, name: 'Lunch' },
-      ],
-    },
-  ];
+  isLoggedIn = false;
+  recipes: Recipe[] = [];
+  private authSubscription?: Subscription;
+
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private recipesService: RecipesService
+  ) {}
+
+  async ngOnInit() {
+    this.authSubscription = this.authService.currentUser.subscribe((user) => {
+      this.isLoggedIn = !!user;
+    });
+    this.recipes = await this.recipesService.getAllRecipes();
+  }
+
+  ngOnDestroy(): void {
+    this.authSubscription?.unsubscribe();
+  }
+
+  readonly dialog = inject(MatDialog);
+
+  openDialog() {
+    const dialogRef = this.dialog.open(CreateRecipeComponent);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  openRecipe(id: string) {
+    this.router.navigate([`/recipes/${id}`]);
+  }
 }

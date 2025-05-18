@@ -3,7 +3,7 @@ import { Review } from './Review';
 import { Tag } from './Tag';
 
 export interface Recipe {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   ingredients: Ingredient[];
@@ -11,10 +11,7 @@ export interface Recipe {
   servings?: number;
   prepTimeMinutes?: number;
   cookTimeMinutes?: number;
-  totalTimeMinutes?: number;
   imageUrl?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
   author?: string;
   cuisine?: string;
   difficulty?: 'easy' | 'medium' | 'hard';

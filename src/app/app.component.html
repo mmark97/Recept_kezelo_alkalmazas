@@ -1,7 +1,7 @@
 
 <mat-drawer-container class="container">
   <mat-drawer mode="side" opened class="mat-drawer">
-    <app-side-nav />
+    <app-side-nav [isLoggedIn]="isLoggedIn" (logoutEvent)="logout()" />
   </mat-drawer>
   <mat-drawer-content class="content">
     <router-outlet />

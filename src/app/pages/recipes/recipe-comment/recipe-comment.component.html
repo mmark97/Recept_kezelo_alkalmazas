@@ -1,0 +1,15 @@
+<form class="comment" [formGroup]="commentForm" (ngSubmit)="submitComment()">
+  <mat-form-field appearance="fill">
+    <mat-label>Comment</mat-label>
+    <input matInput type="text" formControlName="comment" multiple />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Rating</mat-label>
+    <input matInput type="number" min="1" max="5" formControlName="rating" />
+  </mat-form-field>
+
+  <button mat-icon-button color="primary" type="submit">
+    <mat-icon matListItemIcon>send</mat-icon>
+  </button>
+</form>

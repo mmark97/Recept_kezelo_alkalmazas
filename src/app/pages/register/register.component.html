@@ -1,0 +1,46 @@
+<form [formGroup]="signUpForm" (ngSubmit)="register()">
+  <h2>Register</h2>
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        type="email"
+        formControlName="email"
+        value="alex.brown@example.com"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        placeholder="Min length 6"
+        type="password"
+        formControlName="pass1"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Password again</mat-label>
+      <input
+        placeholder="Min length 6"
+        matInput
+        type="password"
+        formControlName="pass2"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>First name</mat-label>
+      <input matInput type="text" formControlName="firstname" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Last name</mat-label>
+      <input matInput type="text" formControlName="lastname" />
+    </mat-form-field>
+  </div>
+
+  <button mat-raised-button color="primary" type="submit">Register</button>
+</form>

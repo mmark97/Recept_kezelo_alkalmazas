@@ -2,6 +2,13 @@
     background-color: rgb(104, 189, 231);
     border-radius: 12px;
     padding: 16px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+    &:hover {
+      transform: scale(1.01);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
 }
 
 mat-card-title{
@@ -19,6 +26,7 @@ mat-card-header{
     display: flex;
     justify-content: center;
     align-items: start;
+    outline: none;
 }
 
 li{

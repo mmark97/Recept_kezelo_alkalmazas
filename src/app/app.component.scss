@@ -5,9 +5,10 @@
 }
 
 .mat-drawer {
-    background-color: rgba(26, 72, 158, 0.911);
+    background-color: rgba(171, 199, 252, 0.911);
     width: 360px;
     display: block;
+    border-radius: 0px;
 }
 
 @media (max-width: 768px) {
@@ -18,5 +19,7 @@
 
 .content {
     flex: 1;
-    background-color: white;
+    display: flex;
+    justify-items: center;
+    justify-content: center;
 }

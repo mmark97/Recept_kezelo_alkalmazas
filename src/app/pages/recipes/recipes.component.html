@@ -1,9 +1,12 @@
 <h1>Recipes</h1>
 
 <div>
+  @if (isLoggedIn) {
+    <button mat-raised-button color="primary" (click)="openDialog()">Create New Recipe</button>
+  }
   <div class="recipes">
     @for (item of recipes; track item) {
-    <app-recipe-item [recipe]="item"></app-recipe-item>
+    <app-recipe-item [recipe]="item" (openRecipe)="openRecipe(item.id)"></app-recipe-item>
     } @empty {
     <li>There are no items.</li>
     }

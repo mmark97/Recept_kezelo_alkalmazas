@@ -1,0 +1,70 @@
+@if (recipe) {
+
+<div class="recipe-card">
+  <h1>{{ recipe.name }}</h1>
+  <p class="author">By {{ recipe.author || "Unknown Author" }}</p>
+
+  <div class="meta">
+    <p><strong>Servings:</strong> {{ recipe.servings || "N/A" }}</p>
+    <p><strong>Prep Time:</strong> {{ recipe.prepTimeMinutes || 0 }} minutes</p>
+    <p><strong>Cook Time:</strong> {{ recipe.cookTimeMinutes || 0 }} minutes</p>
+    <p><strong>Cuisine:</strong> {{ recipe.cuisine || "N/A" }}</p>
+    <p><strong>Difficulty:</strong> {{ recipe.difficulty }}</p>
+  </div>
+
+  <div class="section">
+    <h2>Description</h2>
+    <p>{{ recipe.description }}</p>
+  </div>
+
+  <div class="section">
+    <h2>Ingredients</h2>
+    <ul>
+      @for (ingredient of recipe.ingredients; track $index) {
+      <li>
+        {{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.name }}
+      </li>
+      }
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Instructions</h2>
+    <ol>
+      @for (step of recipe.instructions; track $index) {
+      <li>
+        {{ step }}
+      </li>
+      }
+    </ol>
+  </div>
+
+  @if (recipe.tags?.length) {
+  <div class="section">
+    <h3>Tags</h3>
+    @for (tag of recipe.tags; track $index) {
+    <span class="tag">{{ tag.name }}</span>
+    }
+  </div>
+  } @if(recipe.reviews?.length){
+  <div class="section">
+    <h3>Reviews</h3>
+    @for (review of recipe.reviews; track $index) {
+    <div class="review">
+      <strong>{{ review.userId }}</strong>
+      <span> - {{ review.rating }}/5</span>
+      <p>{{ review.createdAt | date : "yyyy-MM-dd" }}</p>
+      <p>{{ review.comment }}</p>
+    </div>
+    }
+  </div>
+  } @if (isLoggedIn) {
+  <app-recipe-comment [recipeId]="recipe.id"></app-recipe-comment>
+  } @else {
+  <button mat-raised-button type="button" (click)="navigateToLogin()">
+    Login for comment
+  </button>
+  }
+</div>
+
+}

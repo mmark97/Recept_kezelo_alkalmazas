@@ -1,0 +1,18 @@
+form{
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 2rem;
+    border-radius: 1rem;
+    gap: 1rem;
+}
+
+h2{
+    text-align: center;
+}
+
+div{
+    display: flex;
+    flex-direction: column;
+}
